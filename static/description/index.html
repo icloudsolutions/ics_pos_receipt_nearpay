@@ -333,6 +333,24 @@
             font-size: 12px;
         }
         
+        .odoo-apps-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none !important;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .odoo-apps-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -379,8 +397,23 @@
                     <div class="section-icon">📋</div>
                     Overview
                 </h2>
-                <p>The <strong>ICS POS Receipt NearPay</strong> module extends the standard Odoo 18 Point of Sale receipt to display NearPay transaction details directly in the receipt footer. Unlike image-based approaches, this solution uses Odoo's native receipt rendering system for perfect compatibility with all printers (ESC/POS, browser, mobile).</p>
-                <p style="margin-top: 15px;">This lightweight module integrates seamlessly with your existing NearPay payment flow and requires no additional dependencies or image generation.</p>
+                <p>The <strong>ICS POS Receipt NearPay</strong> module extends the standard Odoo 18 Point of Sale receipt to display NearPay transaction details directly in the receipt footer. This module <strong>requires</strong> the <code>ics_pos_nearpay_integration</code> module to be installed, as it relies on NearPay transaction data stored by that integration.</p>
+                <p style="margin-top: 15px;">Based on the official <a href="https://docs.nearpay.io/en/guides/sdk-models#transaction-receipt" target="_blank" style="color: #17a2b8;">NearPay SDK TransactionReceipt model</a>, this module displays key fields like Approval Code, RRN, Terminal ID, and more — all within Odoo's native receipt system.</p>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">🔗</div>
+                    Dependency Requirement
+                </h2>
+                <div class="warning-box">
+                    <h4>⚠️ Mandatory Dependency</h4>
+                    <p>This module <strong>depends on <code>ics_pos_nearpay_integration</code></strong>. You must install and configure that module first to capture NearPay transaction data (e.g., <code>nearpay_approval_code</code>, <code>nearpay_retrieval_ref_no</code>, etc.) on <code>pos.payment</code> records.</p>
+                    <p><strong>Download the required integration module here:</strong></p>
+                    <a href="https://apps.odoo.com/apps/modules/18.0/ics_pos_nearpay_integration" class="odoo-apps-link" target="_blank">
+                        📦 Install ics_pos_nearpay_integration from Odoo Apps
+                    </a>
+                </div>
             </div>
 
             <div class="section">
@@ -394,7 +427,7 @@
                             <div class="feature-icon">📄</div>
                             Native Receipt Integration
                         </h3>
-                        <p>Displays NearPay transaction data directly in the standard Odoo POS receipt using native templates — no images, no blank pages.</p>
+                        <p>Displays NearPay data in the standard Odoo POS receipt footer — no images, no blank pages.</p>
                     </div>
                     
                     <div class="feature-card">
@@ -402,7 +435,15 @@
                             <div class="feature-icon">🖨️</div>
                             Universal Printer Support
                         </h3>
-                        <p>Works flawlessly with ESC/POS thermal printers, browser print, and mobile POS apps — no session loss or blank pages.</p>
+                        <p>Works with ESC/POS, browser print, and mobile — no session loss.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">✅</div>
+                            Official SDK Compliance
+                        </h3>
+                        <p>Uses fields from NearPay's official <code>TransactionReceipt</code> model (approval_code, RRN, tid, etc.).</p>
                     </div>
                     
                     <div class="feature-card">
@@ -410,23 +451,15 @@
                             <div class="feature-icon">⚙️</div>
                             Configurable Display
                         </h3>
-                        <p>Enable/disable NearPay info via POS settings. Choose which fields to show (approval code, RRN, terminal ID, etc.).</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <h3>
-                            <div class="feature-icon">✅</div>
-                            Terminal-Agnostic Detection
-                        </h3>
-                        <p>Uses Odoo's standard <code>payment_method_type = 'terminal'</code> detection — compatible with any terminal-based payment.</p>
+                        <p>Enable/disable via POS settings. Only shows data if present.</p>
                     </div>
                     
                     <div class="feature-card">
                         <h3>
                             <div class="feature-icon">📱</div>
-                        Mobile-Optimized
+                            Mobile-Optimized
                         </h3>
-                        <p>No new tabs, no session disruption — perfect for Odoo POS on mobile browsers and PWAs.</p>
+                        <p>No new tabs, no disruption — perfect for mobile POS.</p>
                     </div>
                     
                     <div class="feature-card">
@@ -434,33 +467,8 @@
                             <div class="feature-icon">🧩</div>
                             Lightweight & Maintainable
                         </h3>
-                        <p>No extra components, no image caching, no complex logic — just clean, standard Odoo extension.</p>
+                        <p>No extra components — just clean Odoo extension.</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>
-                    <div class="section-icon">🛠️</div>
-                    Technical Specifications
-                </h2>
-                <div class="tech-stack">
-                    <div class="tech-item">Odoo 18.0</div>
-                    <div class="tech-item">JavaScript ES6+</div>
-                    <div class="tech-item">Python 3.8+</div>
-                    <div class="tech-item">OWL Framework</div>
-                    <div class="tech-item">Native POS Receipt</div>
-                    <div class="tech-item">XML Templates</div>
-                </div>
-                
-                <div style="margin-top: 30px;">
-                    <h3>Integration Points:</h3>
-                    <ul style="margin-top: 15px; padding-left: 20px;">
-                        <li><strong>Models:</strong> Extends <code>PosOrder.export_for_printing()</code> to inject NearPay data</li>
-                        <li><strong>Template:</strong> Uses <code>after-footer</code> slot in standard receipt</li>
-                        <li><strong>Settings:</strong> Adds configurable toggle in POS config</li>
-                        <li><strong>Compatibility:</strong> Works with any terminal payment method storing NearPay fields</li>
-                    </ul>
                 </div>
             </div>
 
@@ -470,9 +478,10 @@
                     Requirements
                 </h2>
                 <ul class="requirements-list">
-                    <li><strong>Odoo Community/Enterprise 18.0</strong> with Point of Sale installed</li>
-                    <li><strong>NearPay Payment Integration</strong> that stores transaction data on <code>pos.payment</code> records (e.g., <code>nearpay_transaction_id</code>, <code>nearpay_approval_code</code>, etc.)</li>
-                    <li><strong>Payment Method</strong> configured with <code>payment_method_type = 'terminal'</code></li>
+                    <li><strong>Odoo 18.0</strong> with Point of Sale installed</li>
+                    <li><strong><a href="https://apps.odoo.com/apps/modules/18.0/ics_pos_nearpay_integration" target="_blank">ics_pos_nearpay_integration</a></strong> module installed and configured</li>
+                    <li>NearPay payment method with <code>payment_method_type = 'terminal'</code></li>
+                    <li>NearPay transaction data stored on <code>pos.payment</code> records (e.g., <code>nearpay_approval_code</code>, <code>nearpay_transaction_id</code>, etc.)</li>
                 </ul>
             </div>
 
@@ -482,56 +491,26 @@
                     Installation & Configuration
                 </h2>
                 <ol class="installation-steps">
-                    <li>Download and place the <code>ics_pos_receipt_nearpay</code> folder in your Odoo addons directory</li>
-                    <li>Update the apps list and install "ICS POS Receipt NearPay"</li>
-                    <li>Go to <strong>Point of Sale > Configuration > Settings</strong></li>
-                    <li>Enable <strong>"Show NearPay Info on Receipt"</strong> under Payment section</li>
-                    <li>Process a NearPay payment — transaction details will appear in the receipt footer</li>
+                    <li>Install <strong><a href="https://apps.odoo.com/apps/modules/18.0/ics_pos_nearpay_integration" target="_blank">ics_pos_nearpay_integration</a></strong> first</li>
+                    <li>Download and place <code>ics_pos_receipt_nearpay</code> in your addons folder</li>
+                    <li>Update apps list and install "ICS POS Receipt NearPay"</li>
+                    <li>Go to <strong>POS > Configuration > Settings</strong></li>
+                    <li>Enable <strong>"Show NearPay Info on Receipt"</strong></li>
+                    <li>Process a NearPay payment — details appear in receipt footer</li>
                 </ol>
 
                 <div style="margin-top: 30px;">
-                    <h3>NearPay Data Fields (must be present on payment record):</h3>
+                    <h3>Supported NearPay Fields (from SDK):</h3>
                     <div class="code-block">
-# Required fields (at minimum):
-- nearpay_transaction_id
-- nearpay_approval_code
-
-# Optional but recommended:
-- nearpay_card_scheme
-- nearpay_status_message
-- nearpay_terminal_id
-- nearpay_retrieval_ref_no
-- nearpay_currency
-- nearpay_amount_authorized
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>
-                    <div class="section-icon">🔄</div>
-                    Workflow Process
-                </h2>
-                <div style="margin-top: 20px;">
-                    <div class="feature-card">
-                        <h3>1. Payment Processing</h3>
-                        <p>NearPay transaction is processed via your existing Flutter/terminal integration.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>2. Data Storage</h3>
-                        <p>Transaction details are saved on the <code>pos.payment</code> record in Odoo POS.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>3. Receipt Generation</h3>
-                        <p>When printing, <code>export_for_printing()</code> includes NearPay data in receipt context.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>4. Native Rendering</h3>
-                        <p>Receipt template displays NearPay info in the footer using standard Odoo rendering.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>5. Universal Printing</h3>
-                        <p>Receipt prints correctly on any device or printer without workarounds.</p>
+# Mapped from NearPay SDK TransactionReceipt:
+- nearpay_approval_code      → Approval Code
+- nearpay_retrieval_ref_no   → RRN (Retrieval Reference Number)
+- nearpay_terminal_id        → Terminal ID (tid)
+- nearpay_transaction_id     → Transaction UUID
+- nearpay_card_scheme        → Card Network (Visa, Mada, etc.)
+- nearpay_status_message     → Transaction Status
+- nearpay_currency           → Currency (SAR)
+- nearpay_amount_authorized  → Authorized Amount
                     </div>
                 </div>
             </div>
@@ -541,14 +520,14 @@
                     <div class="section-icon">📞</div>
                     Support & Documentation
                 </h2>
-                <p>For technical support, customization requests, or additional features, please contact our development team. We provide comprehensive support for installation, configuration, and customization of the NearPay integration.</p>
+                <p>For technical support, customization requests, or additional features, please contact our development team.</p>
                 
                 <div style="margin-top: 20px;">
                     <h3>What's Included:</h3>
                     <ul style="margin-top: 15px; padding-left: 20px;">
                         <li>Complete module source code</li>
                         <li>Installation and configuration guide</li>
-                        <li>Lightweight and maintainable codebase</li>
+                        <li>Dependency on official NearPay SDK model</li>
                         <li>Technical support via email</li>
                         <li>Updates for Odoo 18.x versions</li>
                     </ul>
