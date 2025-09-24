@@ -18,9 +18,11 @@
             'ics_pos_receipt_nearpay/static/src/js/PosOrder.js',
         ]
     },
-    'images': ['static/description/banner.png'],
+    "images": ["static/description/img/thumbnail.png","static/description/icon.png", "static/description/banner.png"],
     'license': 'LGPL-3',
     'installable': True,
     'application': False,
     'auto_install': False,
+    'price': '0',
+    'currency': 'EUR'
 }
