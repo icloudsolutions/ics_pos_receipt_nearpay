@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICS POS Receipt NearPay - Odoo 18</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 20px;
+        }
+        
+        .logo-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .logo-fallback .main-text {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        
+        .logo-fallback .sub-text {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: -2px;
+            letter-spacing: 1px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .requirements-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .requirements-list li {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .installation-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .installation-steps li {
+            counter-increment: step-counter;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 15px 15px 0;
+            position: relative;
+        }
+        
+        .installation-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-button:hover {
+            background: rgba(52, 152, 219, 1);
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(32, 201, 151, 0.1));
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .company-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .contact-icon {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .company-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="./ics-logo.png" alt="iCloud Solutions Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback" style="display: none;">
+                    <div class="main-text">iCS</div>
+                    <div class="sub-text">SOLUTIONS</div>
+                </div>
+            </div>
+
+            <h1>ICS POS Receipt NearPay</h1>
+            <p class="subtitle">Native NearPay Transaction Details in Standard Odoo 18 POS Receipt</p>
+            <span class="version-badge">Version 18.0.1.0.0</span>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>
+                    <div class="section-icon">📋</div>
+                    Overview
+                </h2>
+                <p>The <strong>ICS POS Receipt NearPay</strong> module extends the standard Odoo 18 Point of Sale receipt to display NearPay transaction details directly in the receipt footer. Unlike image-based approaches, this solution uses Odoo's native receipt rendering system for perfect compatibility with all printers (ESC/POS, browser, mobile).</p>
+                <p style="margin-top: 15px;">This lightweight module integrates seamlessly with your existing NearPay payment flow and requires no additional dependencies or image generation.</p>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">🚀</div>
+                    Key Features
+                </h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">📄</div>
+                            Native Receipt Integration
+                        </h3>
+                        <p>Displays NearPay transaction data directly in the standard Odoo POS receipt using native templates — no images, no blank pages.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">🖨️</div>
+                            Universal Printer Support
+                        </h3>
+                        <p>Works flawlessly with ESC/POS thermal printers, browser print, and mobile POS apps — no session loss or blank pages.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">⚙️</div>
+                            Configurable Display
+                        </h3>
+                        <p>Enable/disable NearPay info via POS settings. Choose which fields to show (approval code, RRN, terminal ID, etc.).</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">✅</div>
+                            Terminal-Agnostic Detection
+                        </h3>
+                        <p>Uses Odoo's standard <code>payment_method_type = 'terminal'</code> detection — compatible with any terminal-based payment.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">📱</div>
+                        Mobile-Optimized
+                        </h3>
+                        <p>No new tabs, no session disruption — perfect for Odoo POS on mobile browsers and PWAs.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>
+                            <div class="feature-icon">🧩</div>
+                            Lightweight & Maintainable
+                        </h3>
+                        <p>No extra components, no image caching, no complex logic — just clean, standard Odoo extension.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">🛠️</div>
+                    Technical Specifications
+                </h2>
+                <div class="tech-stack">
+                    <div class="tech-item">Odoo 18.0</div>
+                    <div class="tech-item">JavaScript ES6+</div>
+                    <div class="tech-item">Python 3.8+</div>
+                    <div class="tech-item">OWL Framework</div>
+                    <div class="tech-item">Native POS Receipt</div>
+                    <div class="tech-item">XML Templates</div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Integration Points:</h3>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li><strong>Models:</strong> Extends <code>PosOrder.export_for_printing()</code> to inject NearPay data</li>
+                        <li><strong>Template:</strong> Uses <code>after-footer</code> slot in standard receipt</li>
+                        <li><strong>Settings:</strong> Adds configurable toggle in POS config</li>
+                        <li><strong>Compatibility:</strong> Works with any terminal payment method storing NearPay fields</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">📋</div>
+                    Requirements
+                </h2>
+                <ul class="requirements-list">
+                    <li><strong>Odoo Community/Enterprise 18.0</strong> with Point of Sale installed</li>
+                    <li><strong>NearPay Payment Integration</strong> that stores transaction data on <code>pos.payment</code> records (e.g., <code>nearpay_transaction_id</code>, <code>nearpay_approval_code</code>, etc.)</li>
+                    <li><strong>Payment Method</strong> configured with <code>payment_method_type = 'terminal'</code></li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">⚙️</div>
+                    Installation & Configuration
+                </h2>
+                <ol class="installation-steps">
+                    <li>Download and place the <code>ics_pos_receipt_nearpay</code> folder in your Odoo addons directory</li>
+                    <li>Update the apps list and install "ICS POS Receipt NearPay"</li>
+                    <li>Go to <strong>Point of Sale > Configuration > Settings</strong></li>
+                    <li>Enable <strong>"Show NearPay Info on Receipt"</strong> under Payment section</li>
+                    <li>Process a NearPay payment — transaction details will appear in the receipt footer</li>
+                </ol>
+
+                <div style="margin-top: 30px;">
+                    <h3>NearPay Data Fields (must be present on payment record):</h3>
+                    <div class="code-block">
+# Required fields (at minimum):
+- nearpay_transaction_id
+- nearpay_approval_code
+
+# Optional but recommended:
+- nearpay_card_scheme
+- nearpay_status_message
+- nearpay_terminal_id
+- nearpay_retrieval_ref_no
+- nearpay_currency
+- nearpay_amount_authorized
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">🔄</div>
+                    Workflow Process
+                </h2>
+                <div style="margin-top: 20px;">
+                    <div class="feature-card">
+                        <h3>1. Payment Processing</h3>
+                        <p>NearPay transaction is processed via your existing Flutter/terminal integration.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>2. Data Storage</h3>
+                        <p>Transaction details are saved on the <code>pos.payment</code> record in Odoo POS.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>3. Receipt Generation</h3>
+                        <p>When printing, <code>export_for_printing()</code> includes NearPay data in receipt context.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>4. Native Rendering</h3>
+                        <p>Receipt template displays NearPay info in the footer using standard Odoo rendering.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>5. Universal Printing</h3>
+                        <p>Receipt prints correctly on any device or printer without workarounds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>
+                    <div class="section-icon">📞</div>
+                    Support & Documentation
+                </h2>
+                <p>For technical support, customization requests, or additional features, please contact our development team. We provide comprehensive support for installation, configuration, and customization of the NearPay integration.</p>
+                
+                <div style="margin-top: 20px;">
+                    <h3>What's Included:</h3>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>Complete module source code</li>
+                        <li>Installation and configuration guide</li>
+                        <li>Lightweight and maintainable codebase</li>
+                        <li>Technical support via email</li>
+                        <li>Updates for Odoo 18.x versions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    <img src="https://icloud-solutions.net/web/image/website/1/logo/" alt="iCloud Solutions" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display: none; color: white; font-weight: bold; font-size: 14px;">iCS</div>
+                </div>
+                <div>
+                    <h3 style="margin: 0;">Developed by iCloud Solutions</h3>
+                    <p style="margin: 5px 0 0 0; color: #7f8c8d; font-size: 0.9em;">Professional Odoo development and integration services</p>
+                </div>
+            </div>
+            
+            <div class="company-info">
+                <a href="https://icloud-solutions.net" class="contact-item" target="_blank">
+                    <div class="contact-icon">🌐</div>
+                    <span>icloud-solutions.net</span>
+                </a>
+                
+                <a href="https://wa.me/21650271737" class="contact-item" target="_blank">
+                    <div class="contact-icon">📱</div>
+                    <span>+216 50 271 737</span>
+                </a>
+                
+                <a href="mailto:contact@icloud-solutions.net" class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <span>contact@icloud-solutions.net</span>
+                </a>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 0.9em; color: #95a5a6;">
+                © 2024 iCloud Solutions. All rights reserved. | Specialized in Odoo ERP solutions and mobile integrations.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showCopyFeedback();
+                });
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCopyFeedback();
+            }
+        }
+        
+        function showCopyFeedback() {
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = 'rgba(40, 167, 69, 0.8)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'rgba(52, 152, 219, 0.8)';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
